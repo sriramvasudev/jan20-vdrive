@@ -49,7 +49,7 @@ function listAlbums() {
         var albumName = decodeURIComponent(prefix.replace("/", ""));
         return getHtml([
           "<li>",
-          "<span onclick=\"deleteAlbum('" + albumName + "')\">X</span>",
+          "<button onclick=\"deleteAlbum('" + albumName + "')\">Delete Album</button>",
           "<span onclick=\"viewAlbum('" + albumName + "')\">",
           albumName,
           "</span>",
