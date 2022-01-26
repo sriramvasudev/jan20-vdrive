@@ -122,7 +122,7 @@ function viewAlbum(albumName) {
         '<img style="width:128px;height:128px;" src="' + photoUrl + '"/>',
         "</div>",
         "<div>",
-        "<span  style="color:blue" onclick=\"deletePhoto('" +
+        "<span onclick=\"deletePhoto('" +
           albumName +
           "','" +
           photoKey +
