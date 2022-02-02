@@ -1,3 +1,4 @@
+
 version: 0.2
 env:
   secrets-manager:
@@ -8,9 +9,10 @@ env:
 phases:
   install:
     runtime-versions:
-      java: openjdk8
+      java: corretto11
   pre_build:
     commands:
+
       - apt-get update
       - apt-get install -y jq
       - wget http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
@@ -27,3 +29,15 @@ phases:
       - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
       - cat result.json
       - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ;fi
+
+  post_build:
+    commands:
+
+      # Do not remove this statement. This command is required for AWS CodeStar projects.
+      # Update the AWS Partition, AWS Region, account ID and project ID in the project ARN in template-configuration.json file so AWS CloudFormation can tag project resources.
+      - sed -i.bak 's/\$PARTITION\$/'${PARTITION}'/g;s/\$AWS_REGION\$/'${AWS_REGION}'/g;s/\$ACCOUNT_ID\$/'${ACCOUNT_ID}'/g;s/\$PROJECT_ID\$/'${PROJECT_ID}'/g' template-configuration.json
+
+artifacts:
+  files:
+    - '**/*'
+    - 'template-configuration.json'
